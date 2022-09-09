@@ -1,0 +1,14 @@
+[package]
+name = "ProofOfCopy"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ferris-says = "0.2"
+sha256 = "1.0.3"
+
+[[bin]]
+name = "proof_of_copy"
+path = "src/main.rs"
