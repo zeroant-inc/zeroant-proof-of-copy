@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
         "sguess"
-    ]
+    ],
+    "eslint.format.enable": false,
+    "editor.formatOnSave": true
 }

@@ -1,55 +1,59 @@
-use std::any::Any;
+use serde::{Deserialize, Serialize};
 
-#[derive( Clone)]
-pub enum  TransactionValue{
-   Token(String),
-   Bit(f64),
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+pub enum TransactionValue {
+    token(String),
+    bit(f64),
 }
-
 
 impl TransactionValue {
     fn value_bit(&self) -> f64 {
         match self {
-            TransactionValue::Bit(val)=> return val.clone(),
-            TransactionValue::Token(_) => todo!(),   
+            TransactionValue::bit(val) => return val.clone(),
+            TransactionValue::token(_) => todo!(),
         }
     }
     fn value_string(&self) -> String {
         match self {
-            TransactionValue::Bit(_)=>  todo!( ),
-            TransactionValue::Token(val) =>return val.clone(),   
+            TransactionValue::bit(_) => todo!(),
+            TransactionValue::token(val) => return val.clone(),
         }
     }
-    fn string(&self) -> String  {
+    fn string(&self) -> String {
         match self {
-            TransactionValue::Bit(val)=> return val.to_string(),
-            TransactionValue::Token(val) => return  val.clone(),   
+            TransactionValue::bit(val) => return val.to_string(),
+            TransactionValue::token(val) => return val.clone(),
         }
     }
 }
 
-#[derive( Clone)]
-pub  struct  Transaction {
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+pub struct Transaction {
     pub id: String,
-    pub value:  TransactionValue ,
-    pub  sender: String,
-    pub receiver:String,
+    pub value: TransactionValue,
+    pub sender: String,
+    pub receiver: String,
     pub fees: f64,
 }
 
-impl Transaction{
-    pub fn new(id:String, value: TransactionValue, sender:  String,receiver: String, fees: f64) -> Transaction{
+impl Transaction {
+    pub fn new(
+        id: String,
+        value: TransactionValue,
+        sender: String,
+        receiver: String,
+        fees: f64,
+    ) -> Transaction {
         Transaction {
             id: id,
             value,
             sender: sender,
             receiver: receiver,
-            fees:fees
+            fees: fees,
         }
     }
-   
 }
-impl Transaction   {
+impl Transaction {
     pub fn string(&self) -> String {
         let mut result = String::from("");
         result.push_str(&self.id);
@@ -62,5 +66,4 @@ impl Transaction   {
     pub fn get_id(&self) -> &String {
         return &self.id;
     }
-   
 }
