@@ -10,12 +10,12 @@ impl TransactionValue {
     fn value_bit(&self) -> f64 {
         match self {
             TransactionValue::bit(val) => return val.clone(),
-            TransactionValue::token(_) => todo!(),
+            TransactionValue::token(_) => panic!(),
         }
     }
     fn value_string(&self) -> String {
         match self {
-            TransactionValue::bit(_) => todo!(),
+            TransactionValue::bit(_) => panic!(),
             TransactionValue::token(val) => return val.clone(),
         }
     }

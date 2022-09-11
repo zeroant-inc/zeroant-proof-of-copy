@@ -29,16 +29,16 @@ impl BlockChain {
     pub fn difficulty() -> usize {
         return 2;
     }
-    pub fn get_hostname(&self) -> String {
+    pub fn _get_hostname(&self) -> String {
         return self.hostname.clone();
     }
-    pub fn set_hostname(&self) -> String {
+    pub fn _set_hostname(&self) -> String {
         return self.hostname.clone();
     }
     pub fn get_chain(&self) -> &Chain {
         return &self.chains;
     }
-    fn raw_block<T>(&self) -> mongodb::Collection<T> {
+    fn _raw_block<T>(&self) -> mongodb::Collection<T> {
         self.db
             .database(&self.hostname.clone())
             .collection("blockchain")
@@ -94,7 +94,7 @@ impl BlockChain {
         return self;
     }
     pub async fn add_genesis(&self) -> Option<Block> {
-        let block = Block::new(
+        let block = Block::with_id(
             "0".to_string(),
             Transaction::new(
                 "-1".to_string(),
@@ -122,11 +122,11 @@ impl BlockChain {
         let genesis = self.get_genesis().await;
         let pre = genesis.expect("").digest().clone();
         let block = self
-            .get_revelation_block(Block::new(
+            .get_revelation_block(Block::with_id(
                 "-1".to_string(),
                 Transaction::new(
                     "-1".to_string(),
-                    TransactionValue::token("first".to_string()),
+                    TransactionValue::token("last".to_string()),
                     "revelation".to_string(),
                     "genesis".to_string(),
                     0.0,
@@ -143,7 +143,7 @@ impl BlockChain {
             }
         };
         if block.digest() != revelation.digest() {
-            panic!("Invalid genesis block");
+            panic!("Invalid revelation block");
         }
         return Some(revelation);
     }
@@ -178,9 +178,10 @@ impl BlockChain {
 
         return revelation;
     }
-    pub async fn mine(&self, _block: Block) -> Result<bool, &str> {
+    pub async fn mine(&self, block: Block) -> Result<bool, &str> {
         let mut guess = Some(999999999999);
-        let mut block = _block;
+        let mut block = block;
+        block.id = Some(self.chains_len().await.to_string());
         let genesis = &self.get_genesis().await.expect("");
         let genesis_hash = genesis.digest();
         let revelation = self.get_revelation().await.expect("");

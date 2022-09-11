@@ -6,7 +6,7 @@ use sha256;
 #[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 pub struct Block {
     pub _id: Option<ObjectId>,
-    pub id: String,
+    pub id: Option<String>,
     pub transaction: Transaction,
     pub previous_hash: String,
     pub owner: String,
@@ -14,10 +14,25 @@ pub struct Block {
 }
 
 impl Block {
-    pub fn new(id: String, transaction: Transaction, previous_hash: String, owner: String) -> Self {
+    pub fn new(transaction: Transaction, previous_hash: String, owner: String) -> Self {
         Self {
             _id: Some(ObjectId::new()),
-            id: String::from(id),
+            id: None,
+            transaction: transaction,
+            previous_hash: String::from(previous_hash),
+            owner: String::from(owner),
+            nonce: Some(999999999999),
+        }
+    }
+    pub fn with_id(
+        id: String,
+        transaction: Transaction,
+        previous_hash: String,
+        owner: String,
+    ) -> Self {
+        Self {
+            _id: Some(ObjectId::new()),
+            id: Some(id),
             transaction: transaction,
             previous_hash: String::from(previous_hash),
             owner: String::from(owner),
@@ -35,7 +50,7 @@ impl Block {
     }
     pub fn string(&self) -> String {
         let mut result = String::from("");
-        result.push_str(&self.id);
+        result.push_str(&self.id.as_ref().expect(""));
         result.push_str(&self.transaction.string());
         result.push_str(&self.previous_hash);
         result.push_str(&self.owner);
@@ -52,6 +67,6 @@ impl Block {
         return b;
     }
     pub fn get_id(&self) -> &String {
-        return &self.id;
+        return &self.id.as_ref().expect("");
     }
 }

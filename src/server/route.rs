@@ -92,7 +92,6 @@ pub async fn chains_mine(blockchain: web::Data<BlockChain>) -> HttpResponse {
         .expect("expected previous hash");
     let result = blockchain
         .mine(Block::new(
-            blockchain.chains_len().await.to_string(),
             Transaction::new(
                 "-1".to_string(),
                 TransactionValue::token("first".to_string()),
